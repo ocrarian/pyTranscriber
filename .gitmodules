@@ -1,0 +1,4 @@
+[submodule "autosub"]
+	path = autosub_cli
+	url = https://github.com/yshalsager/autosub.git
+	branch = witai

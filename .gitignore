@@ -16,3 +16,5 @@ venv/
 .python-version
 .idea/
 .vsode/
+*.m4a
+*.mp3
