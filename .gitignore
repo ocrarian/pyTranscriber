@@ -12,3 +12,7 @@ dist/
 MANIFEST
 *#*
 ffmpeg*
+venv/
+.python-version
+.idea/
+.vsode/
