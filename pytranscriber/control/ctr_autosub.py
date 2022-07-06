@@ -1,6 +1,7 @@
 import multiprocessing
-from os import name, uname
+from os import name
 from pathlib import Path
+from platform import uname
 from sys import path
 from time import sleep
 
