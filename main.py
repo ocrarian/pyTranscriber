@@ -12,7 +12,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
-from pytranscriber.control.ctr_main import Ctr_Main
+from pytranscriber.gui.main import Ctr_Main
 import multiprocessing
 
 if __name__ == '__main__':
