@@ -12,11 +12,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
-from pytranscriber.gui.main import Ctr_Main
+from pytranscriber.gui.main import main
 import multiprocessing
 
 if __name__ == '__main__':
     multiprocessing.freeze_support()
-    import sys
-    ctrMain = Ctr_Main()
-    sys.exit(main())
+
+    raise SystemExit(main())
