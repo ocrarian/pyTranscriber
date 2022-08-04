@@ -12,8 +12,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
-from PyQt5.QtCore import QThread
-from PyQt5.QtCore import pyqtSignal
+from PySide6 import QtCore
 from pathlib import Path
 from pytranscriber.util.srtparser import SRTParser
 from pytranscriber.util.util import MyUtil
@@ -21,18 +20,18 @@ from pytranscriber.control.ctr_autosub import Ctr_Autosub
 import os
 
 
-class Thread_Exec_Autosub(QThread):
-    signalLockGUI = pyqtSignal()
-    signalResetGUIAfterCancel = pyqtSignal()
-    signalResetGUIAfterSuccess = pyqtSignal()
-    signalProgress = pyqtSignal(str, int)
-    signalProgressFileYofN = pyqtSignal(str)
-    signalErrorMsg = pyqtSignal(str)
+class Thread_Exec_Autosub(QtCore.QThread):
+    signalLockGUI = QtCore.Signal()
+    signalResetGUIAfterCancel = QtCore.Signal()
+    signalResetGUIAfterSuccess = QtCore.Signal()
+    signalProgress = QtCore.Signal(str, int)
+    signalProgressFileYofN = QtCore.Signal(str)
+    signalErrorMsg = QtCore.Signal(str)
 
     def __init__(self, objParamAutosub):
         self.objParamAutosub = objParamAutosub
         self.running = True
-        QThread.__init__(self)
+        QtCore.QThread.__init__(self)
 
     def __updateProgressFileYofN(self, currentIndex, countFiles ):
         self.signalProgressFileYofN.emit("File " + str(currentIndex+1) + " of " +str(countFiles))
