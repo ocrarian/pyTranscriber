@@ -21,12 +21,12 @@ import os
 
 
 class Thread_Exec_Autosub(QtCore.QThread):
-    signalLockGUI = QtCore.Signal()
-    signalResetGUIAfterCancel = QtCore.Signal()
-    signalResetGUIAfterSuccess = QtCore.Signal()
-    signalProgress = QtCore.Signal(str, int)
-    signalProgressFileYofN = QtCore.Signal(str)
-    signalErrorMsg = QtCore.Signal(str)
+    locking_gui = QtCore.Signal()
+    reseting_gui_after_success = QtCore.Signal()
+    reseting_gui_after_cancel = QtCore.Signal()
+    updateing_progress = QtCore.Signal(str, int)
+    updating_file_progress = QtCore.Signal(str)
+    sending_message = QtCore.Signal(str)
 
     def __init__(self, objParamAutosub):
         self.objParamAutosub = objParamAutosub
@@ -34,10 +34,10 @@ class Thread_Exec_Autosub(QtCore.QThread):
         QtCore.QThread.__init__(self)
 
     def __updateProgressFileYofN(self, currentIndex, countFiles ):
-        self.signalProgressFileYofN.emit("File " + str(currentIndex+1) + " of " +str(countFiles))
+        self.updating_file_progress.emit("File " + str(currentIndex+1) + " of " +str(countFiles))
 
     def listenerProgress(self, string, percent):
-        self.signalProgress.emit(string, percent)
+        self.updateing_progress.emit(string, percent)
 
     def __generatePathOutputFile(self, sourceFile):
         #extract the filename without extension from the path
@@ -65,7 +65,7 @@ class Thread_Exec_Autosub(QtCore.QThread):
                                     listener_progress = self.listenerProgress)
         #if nothing was returned
         if not fOutput:
-            self.signalErrorMsg.emit("Error! Unable to generate subtitles for file " + sourceFile + ".")
+            self.sending_message.emit("error", "Error! Unable to generate subtitles for file " + sourceFile + ".")
         elif fOutput != -1:
             #if the operation was not canceled
 
@@ -81,7 +81,7 @@ class Thread_Exec_Autosub(QtCore.QThread):
                 MyUtil.open_file(outputFileSRT)
 
     def __loopSelectedFiles(self):
-        self.signalLockGUI.emit()
+        self.locking_gui.emit()
 
         langCode = self.objParamAutosub.langCode
 
@@ -93,7 +93,7 @@ class Thread_Exec_Autosub(QtCore.QThread):
         #if there the output file is not a directory
         if not os.path.isdir(pathOutputFolder):
             #force the user to select a different output directory
-            self.signalErrorMsg.emit("Error! Invalid output folder. Please choose another one.")
+            self.sending_message.emit("error", "Error! Invalid output folder. Please choose another one.")
         else:
             #go ahead with autosub process
             nFiles = len(self.objParamAutosub.listFiles)
@@ -105,9 +105,9 @@ class Thread_Exec_Autosub(QtCore.QThread):
 
             #if operation is canceled does not clear the file list
             if Ctr_Autosub.is_operation_canceled():
-                self.signalResetGUIAfterCancel.emit()
+                self.reseting_gui_after_cancel.emit()
             else:
-                self.signalResetGUIAfterSuccess.emit()
+                self.reseting_gui_after_success.emit()
 
 
     def run(self):

@@ -1,4 +1,4 @@
-'''
+"""
    (C) 2019 Raryel C. Souza
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -10,35 +10,44 @@
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-'''
+"""
 
 import platform
 import os
 import subprocess
 import socket
 
+
 class MyUtil(object):
     @staticmethod
-    def open_file(path):
+    def open_file(file_path):
+        """Open file in files browser depinding on OS."""
         if platform.system() == "Windows":
-            os.startfile(path)
+            os.startfile(file_path)
         elif platform.system() == "Darwin":
-            subprocess.Popen(["open", path])
+            subprocess.Popen(["open", file_path])
         else:
-            subprocess.Popen(["xdg-open", path])
+            subprocess.Popen(["xdg-open", file_path])
 
     @staticmethod
-    def is_internet_connected():
+    def able_to_access_service(service: str = "google"):
+        """Check if we are able to access services."""
         try:
-            # connect to the host -- tells us if the host is actually
-            # reachable
-            s = socket.create_connection(("www.google.com", 80), 2)
-            s.close()
-            return True
+            # Connect to the host -- tells us if the host is actually reachable.
+            if service == "google":
+                s = socket.create_connection(("www.google.com", 80), 2)
+                s.close()
+            elif service == "facebook":
+                # TODO:
+                ...
+            else:
+                raise TypeError(f'No service named "{service}" is available.')
         except OSError:
-            pass
-        return False
+            return False
+        else:
+            return True
 
     @staticmethod
     def percentage(currentval, maxval):
+        """Calculate the progrees percentage."""
         return 100 * currentval / float(maxval)
