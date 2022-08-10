@@ -215,7 +215,7 @@ class MainPanel(QtWidgets.QWidget):
         """Clear list and enable buttons after success."""
         self.__selected_files_list.clear()
 
-        self.__reset_gui_after_cancel()
+        self.__listener_reseting_gui_after_cancel()
 
     def __listener_reseting_gui_after_cancel(self):
         """Reset progress bar and enable buttons after canceling the operation."""
