@@ -30,18 +30,26 @@ class MyUtil(object):
             subprocess.Popen(["xdg-open", file_path])
 
     @staticmethod
-    def able_to_access_service(service: str = "google"):
+    def able_to_access_service(service: str = "Google"):
         """Check if we are able to access services."""
+        # TODO: Get the urls from a shared source.
+        services = {
+            "Wit.ai": "api.wit.ai",
+            "Google": "www.google.com",
+            "xfyun": "iat-api.xfyun.cn",
+            "baidu_asr": "vop.baidu.com",
+            "baidu_pro_asr": "vop.baidu.com",
+        }
+
+        try:
+            url = services[service]
+        except KeyError:
+            raise KeyError(f'No service with the name "{service}" is available.')
+
         try:
             # Connect to the host -- tells us if the host is actually reachable.
-            if service == "google":
-                s = socket.create_connection(("www.google.com", 80), 2)
-                s.close()
-            elif service == "facebook":
-                # TODO:
-                ...
-            else:
-                raise TypeError(f'No service named "{service}" is available.')
+            s = socket.create_connection((url, 80), 2)
+            s.close()
         except OSError:
             return False
         else:
