@@ -37,6 +37,10 @@ class MainPanel(QtWidgets.QWidget):
         """Initialize base components."""
         super().__init__()
 
+        # Accept drap files to the panel.
+        # Configured in self.dragEnterEvent, self.dragMoveEvent, self.dropEvent.
+        self.setAcceptDrops(True)
+
         main_layout = QtWidgets.QVBoxLayout(self)
 
         # Where you can select files, remove files and view them is a list.
@@ -165,28 +169,39 @@ class MainPanel(QtWidgets.QWidget):
             self.__current_operation_progress_lable
         )
 
+    def __add_files_to_list(self, files: tuple[str, ...]) -> None:
+        """
+        Add files to the files list.
+
+        Filter not video nor audio files, and files that has been selected before.
+        """
+        current_files_list = tuple(
+            self.__selected_files_list.item(i).text()
+            for i in range(self.__selected_files_list.count())
+        )
+
+        # TODO: Filter files if they has a not video nor audio mime type.
+
+        for file in files:
+            if file not in current_files_list:
+                self.__selected_files_list.addItem(file)
+
+        # Enable those buttons only if list of files is not empty.
+        # No problem if selected files were duplicates, since the list is not empty.
+        self.__b_run_generator.setEnabled(True)
+        self.__b_remove_files.setEnabled(True)
+
     def __listener_selecting_files(self) -> None:
-        """Get files, check if they was selected before then add them to the list."""
+        """Get files list from QFileDialog, then add them to the list."""
         files, _ = QtWidgets.QFileDialog.getOpenFileNames(
             self,
             caption="Select media",
+            # TODO: Improve the filter by adding more mime types.
             filter="All Media Files (*.mp3 *.mp4 *.wav *.m4a *.wma)",
         )
 
         if files:
-            current_files_list = tuple(
-                self.__selected_files_list.item(i).text()
-                for i in range(self.__selected_files_list.count())
-            )
-
-            for file in files:
-                if file not in current_files_list:
-                    self.__selected_files_list.addItem(file)
-
-            # Enable those buttons only if list of files is not empty.
-            # No problem if selected files were duplicates, since the list is not empty.
-            self.__b_run_generator.setEnabled(True)
-            self.__b_remove_files.setEnabled(True)
+            self.__add_files_to_list(tuple(files))
 
     def __listener_removing_files(self) -> None:
         """Get selected files then delete them and disable buttons if list is empty."""
@@ -353,6 +368,33 @@ class MainPanel(QtWidgets.QWidget):
             # Run the cancel operation in new thread to avoid freezing the GUI.
             self.thread_cancel.start()
             self.thread_exec = None
+
+    def dragEnterEvent(self, event):  # noqa: N802
+        """When a drag action enters the panel."""
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):  # noqa: N802
+        """While a drag action is in progress."""
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):  # noqa: N802
+        """When a drag action is completed."""
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+
+            self.__add_files_to_list(
+                tuple(url.toLocalFile() for url in event.mimeData().urls())
+            )
+        else:
+            event.ignore()
 
 
 def main() -> int:
