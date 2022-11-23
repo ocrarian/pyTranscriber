@@ -11,12 +11,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
-
-from pytranscriber.control.ctr_main import Ctr_Main
+from sys import argv
 import multiprocessing
 
-if __name__ == '__main__':
+from pytranscriber.gui.main import ui_main
+
+
+def main() -> int:
+    """Entry point of the application."""
     multiprocessing.freeze_support()
-    import sys
-    ctrMain = Ctr_Main()
-    sys.exit(main())
+
+    return ui_main(argv)
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

@@ -1,4 +1,4 @@
-'''
+"""
    (C) 2019 Raryel C. Souza
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -10,12 +10,11 @@
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-'''
+"""
 
-class Param_Autosub():
 
-    def __init__(self, listFiles, outputFolder, langCode,
-                boolOpenOutputFilesAuto):
+class Param_Autosub:
+    def __init__(self, listFiles, outputFolder, langCode, boolOpenOutputFilesAuto):
         self.listFiles = listFiles
         self.outputFolder = outputFolder
         self.langCode = langCode

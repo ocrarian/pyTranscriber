@@ -7,7 +7,7 @@ license = "GPLv3"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
-PyQt5 = "^5.15.7"
+PySide6 = "^6.3.1"
 # AutoSub dependencies
 requests = ">=2.3.0"
 pysubs2 = ">=0.2.4"
