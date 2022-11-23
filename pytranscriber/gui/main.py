@@ -3,6 +3,7 @@
 from gettext import gettext as _
 from pathlib import Path
 from typing import Optional
+from typing import Sequence
 
 from PySide6 import QtCore
 from PySide6 import QtWidgets
@@ -397,9 +398,9 @@ class MainPanel(QtWidgets.QWidget):
             event.ignore()
 
 
-def main() -> int:
+def ui_main(argv: Sequence[str]) -> int:
     """Start the GUI."""
-    app = QtWidgets.QApplication([])
+    app = QtWidgets.QApplication(argv)
     window = MainWindow()
     window.show()
     return app.exec()
