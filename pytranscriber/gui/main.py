@@ -4,14 +4,19 @@ from gettext import gettext as _
 from pathlib import Path
 from typing import Optional
 from typing import Sequence
+from webbrowser import open as open_url
 
 from PySide6 import QtCore
+from PySide6 import QtGui
 from PySide6 import QtWidgets
 
 from pytranscriber.control.thread_cancel_autosub import Thread_Cancel_Autosub
 from pytranscriber.control.thread_exec_autosub import Thread_Exec_Autosub
 from pytranscriber.model.param_autosub import Param_Autosub
 from pytranscriber.util.util import MyUtil
+from . import help_dialogs
+from ..__about__ import PROJECT_HOME_PAGE_URL
+from ..__about__ import BUG_REPORT_URL
 
 from . import data
 
@@ -24,11 +29,34 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.resize(900, 450)
+        # TODO: Set the name of the application.
         self.setWindowTitle(_("Name"))
 
         main_panel = MainPanel()
 
         self.setCentralWidget(main_panel)
+
+        self.menu_bar = self.menuBar()
+
+        help_menu = self.menu_bar.addMenu(_("&Help"))
+
+        github_page = QtGui.QAction(
+            QtGui.QIcon.fromTheme("github-repo"), _("&GitHub"), self
+        )
+        github_page.triggered.connect(lambda: open_url(PROJECT_HOME_PAGE_URL))
+        help_menu.addAction(github_page)
+
+        report_bug = QtGui.QAction(
+            QtGui.QIcon.fromTheme("tools-report-bug"), _("Report a &Bug"), self
+        )
+        report_bug.triggered.connect(lambda: open_url(BUG_REPORT_URL))
+        help_menu.addAction(report_bug)
+
+        about = QtGui.QAction(
+            QtGui.QIcon.fromTheme("help-about-symbolic"), _("&About"), self
+        )
+        about.triggered.connect(lambda: help_dialogs.About().exec())
+        help_menu.addAction(about)
 
 
 class MainPanel(QtWidgets.QWidget):
