@@ -143,21 +143,32 @@ class MainPanel(QtWidgets.QWidget):
         # A spacer
         main_layout.addItem(QtWidgets.QSpacerItem(0, 15))
 
-        # Where you can select audio language.
-        audio_lang_layout = QtWidgets.QHBoxLayout()
-        audio_lang_layout.setAlignment(QtCore.Qt.AlignCenter)
-        main_layout.addLayout(audio_lang_layout)
+        # Where you can select engine and audio language.
+        options_layout = QtWidgets.QHBoxLayout()
+        options_layout.setAlignment(QtCore.Qt.AlignCenter)
+        main_layout.addLayout(options_layout)
 
-        audio_lang_layout.addWidget(QtWidgets.QLabel(_("Audio Language")))
+        # Select engine
+        options_layout.addWidget(QtWidgets.QLabel(_("Engine")))
+
+        self.__cobx_engine = QtWidgets.QComboBox()
+        self.__cobx_engine.addItems(
+            data.engines_no_authentication + data.engines_need_authentication
+        )
+        self.__cobx_engine.setMaximumWidth(self.__cobx_engine.minimumSizeHint().width())
+        options_layout.addWidget(self.__cobx_engine)
+
+        options_layout.addSpacing(35)
+
+        # Select language
+        options_layout.addWidget(QtWidgets.QLabel(_("Audio Language")))
 
         self.__cobx_audio_lang = QtWidgets.QComboBox()
         self.__cobx_audio_lang.addItems(data.languages)
         self.__cobx_audio_lang.setMaximumWidth(
             self.__cobx_audio_lang.minimumSizeHint().width()
         )
-        audio_lang_layout.addWidget(self.__cobx_audio_lang)
-
-        # TODO: Add combobox for selecting a generator.
+        options_layout.addWidget(self.__cobx_audio_lang)
 
         # A spacer
         main_layout.addItem(QtWidgets.QSpacerItem(0, 20))

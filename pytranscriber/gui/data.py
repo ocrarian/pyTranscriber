@@ -1,5 +1,15 @@
 """Some data needed in the GUI."""
 
+engines_no_authentication = ("Google",)
+
+# FIXME: Findout what rely need authentication.
+engines_need_authentication = (
+    "xfyun",
+    "Baidu ASR",
+    "Baidu Pro ASR",
+    "WIT AI",
+)
+
 languages = (
     "en-US - English (United States)",
     "en-AU - English (Australia)",
